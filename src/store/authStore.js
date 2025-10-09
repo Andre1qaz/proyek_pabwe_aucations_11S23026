@@ -58,6 +58,7 @@ export const useAuthStore = create((set) => ({
       const userData = await authService.getMe();
       set({ user: userData.data, token });
       return true;
+    // eslint-disable-next-line no-unused-vars
     } catch (error) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
