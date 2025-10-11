@@ -12,7 +12,6 @@ const AuctionList = () => {
 
   useEffect(() => {
     loadAuctions();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter]);
 
   const loadAuctions = async () => {
