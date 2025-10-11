@@ -1,7 +1,20 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig, loadEnv } from "vite";
+import react from "@vitejs/plugin-react";
 
-// https://vite.dev/config/
-export default defineConfig({
-  plugins: [react()],
-})
+export default defineConfig(({ mode }) => {
+  // eslint-disable-next-line no-undef
+  const env = loadEnv(mode, process.cwd(), "");  // baca .env & Vercel env
+
+  return {
+    plugins: [react()],
+    build: {
+      outDir: "dist",           // <— JANGAN pakai "../public_html"
+      emptyOutDir: true
+    },
+    define: {
+      // injeksikan env yang dibutuhkan ke client
+      DELCOM_BASEURL: JSON.stringify(env.VITE_DELCOM_BASEURL),
+    },
+    base: "/",                  // aman untuk deploy di root domain
+  };
+});
