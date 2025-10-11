@@ -9,7 +9,7 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
     build: {
       outDir: "dist",           // <— JANGAN pakai "../public_html"
-      emptyOutDir: true
+      emptyOutDir: false
     },
     define: {
       // injeksikan env yang dibutuhkan ke client
