@@ -1,36 +1,30 @@
 import api from './axios';
 
 export const authService = {
-  // Login - GANTI ke /users/login
+  // Login - GANTI ke GET method dengan query params
   login: async (email, password) => {
-    const formData = new URLSearchParams();
-    formData.append('email', email);
-    formData.append('password', password);
-
-    const response = await api.post('/users/login', formData, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+    const response = await api.get('/users/login', {
+      params: {
+        email: email,
+        password: password,
       },
     });
     return response.data;
   },
 
-  // Register - GANTI ke /users/register
+  // Register - Kemungkinan juga GET
   register: async (name, email, password) => {
-    const formData = new URLSearchParams();
-    formData.append('name', name);
-    formData.append('email', email);
-    formData.append('password', password);
-
-    const response = await api.post('/users/register', formData, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+    const response = await api.get('/users/register', {
+      params: {
+        name: name,
+        email: email,
+        password: password,
       },
     });
     return response.data;
   },
 
-  // Get current user - GANTI ke /users/me
+  // Get current user
   getMe: async () => {
     const response = await api.get('/users/me');
     return response.data;
