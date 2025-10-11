@@ -1,32 +1,38 @@
 import api from './axios';
 
 export const authService = {
-  // Login - GANTI ke GET method dengan query params
+  // Login - POST ke /auth/login
   login: async (email, password) => {
-    const response = await api.get('/users/login', {
-      params: {
-        email: email,
-        password: password,
+    const response = await api.post('/auth/login', {
+      email: email,
+      password: password,
+    }, {
+      headers: {
+        'Content-Type': 'application/json',
       },
     });
     return response.data;
   },
 
-  // Register - Kemungkinan juga GET
+  // Register - POST ke /auth/register
   register: async (name, email, password) => {
-    const response = await api.get('/users/register', {
-      params: {
-        name: name,
-        email: email,
-        password: password,
+    const response = await api.post('/auth/register', {
+      name: name,
+      email: email,
+      password: password,
+    }, {
+      headers: {
+        'Content-Type': 'application/json',
       },
     });
     return response.data;
   },
 
-  // Get current user
+  // Get current user - Gunakan data dari login
   getMe: async () => {
-    const response = await api.get('/users/me');
-    return response.data;
+    // Karena tidak ada endpoint /auth/me di dokumentasi,
+    // kita ambil dari localStorage
+    const user = JSON.parse(localStorage.getItem('user'));
+    return { data: user };
   },
 };

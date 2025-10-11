@@ -11,15 +11,14 @@ export const useAuthStore = create((set) => ({
     set({ isLoading: true, error: null });
     try {
       const response = await authService.login(email, password);
-      const { token } = response.data;
+      
+      // Response format: { success, message, data: { user, token } }
+      const { user, token } = response.data;
       
       localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user));
       
-      // Get user data
-      const userData = await authService.getMe();
-      localStorage.setItem('user', JSON.stringify(userData.data));
-      
-      set({ user: userData.data, token, isLoading: false });
+      set({ user: user, token: token, isLoading: false });
       return { success: true };
     } catch (error) {
       const errorMsg = error.response?.data?.message || 'Login gagal';
@@ -49,21 +48,14 @@ export const useAuthStore = create((set) => ({
 
   checkAuth: async () => {
     const token = localStorage.getItem('token');
-    if (!token) {
+    const user = JSON.parse(localStorage.getItem('user'));
+    
+    if (!token || !user) {
       set({ user: null, token: null });
       return false;
     }
 
-    try {
-      const userData = await authService.getMe();
-      set({ user: userData.data, token });
-      return true;
-    // eslint-disable-next-line no-unused-vars
-    } catch (error) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      set({ user: null, token: null });
-      return false;
-    }
+    set({ user, token });
+    return true;
   },
 }));
